@@ -54,27 +54,6 @@ func GetBeerItem(db *sql.DB, id2 int) models.BeerItem{
   var stmt *sql.Stmt
 	var err error
 
-  /*
-  rows, err := db.Query("select * from BeerItemTable")
-  //checkError(err)
-  if err != nil {
-		log.Fatal(err)
-	}
-
-  for rows.Next() {
-    var tempBeerItem models.BeerItem
-    err = rows.Scan(&tempBeerItem.Id, &tempBeerItem.Name,  &tempBeerItem.Brewery)
-    if err != nil {
-  		log.Fatal(err)
-  	}
-    if tempBeerItem.Id== id2 {
-      return tempBeerItem
-    }
-  }
-
-  return models.BeerItem{}
-  */
-
   stmt, err = db.Prepare("select * from BeerItemTable where id = ?")
 	if err != nil {
 		//log.Fatal(err)
@@ -82,12 +61,32 @@ func GetBeerItem(db *sql.DB, id2 int) models.BeerItem{
 	defer stmt.Close()
 
   var tempBeerItem models.BeerItem
-  err = stmt.QueryRow(id2).Scan(&tempBeerItem.Id, &tempBeerItem.Name,  &tempBeerItem.Brewery)
-	if err != nil {
+  err = stmt.QueryRow(id2).Scan(&tempBeerItem.Id, &tempBeerItem.Name,  &tempBeerItem.Brewery,
+                                &tempBeerItem.Country, &tempBeerItem.Price, &tempBeerItem.Country)
+
+  if err != nil {
 		//log.Fatal(err)
 	}
-	//log.Println("Name:" + tempBeerItem.Name)
-
-  return tempBeerItem
-
+	return tempBeerItem
 }
+
+/*
+rows, err := db.Query("select * from BeerItemTable")
+//checkError(err)
+if err != nil {
+  log.Fatal(err)
+}
+
+for rows.Next() {
+  var tempBeerItem models.BeerItem
+  err = rows.Scan(&tempBeerItem.Id, &tempBeerItem.Name,  &tempBeerItem.Brewery)
+  if err != nil {
+    log.Fatal(err)
+  }
+  if tempBeerItem.Id== id2 {
+    return tempBeerItem
+  }
+}
+
+return models.BeerItem{}
+*/

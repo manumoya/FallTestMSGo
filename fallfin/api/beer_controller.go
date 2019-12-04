@@ -1,29 +1,33 @@
 package api
 
 import (
-  "FallTestMSGo/fallfin/models"
   "net/http"
   "github.com/labstack/echo"
   "strconv"
   "database/sql"
+
+  "FallTestMSGo/fallfin/models"
   "FallTestMSGo/fallfin/dblite"
 )
 
+/* Buscar Cerveza por ID  */
 func SearchBeerByIdGET(c echo.Context) error {
+  id,_ := strconv.Atoi(c.Param("beerID"))
 
-  id,_ := strconv.Atoi(c.Param("id"))
-  name,_ := strconv.Atoi(c.Param("name"))
-  brewery,_ := strconv.Atoi(c.Param("brewery"))
+  var db *sql.DB
+  db = dblite.OpenBD()
 
-  beerIten := new(models.BeerItem)
-  beerIten.Id =id
-  beerIten.Name=string(name)
-  beerIten.Brewery=string(brewery)
+  var beerItem = dblite.GetBeerItem(db, id) // printing the user
 
-  return c.JSON(http.StatusOK, beerIten)
+  // beerIten := new(models.BeerItem)
+  //beerIten.Id =id
+  if (beerItem.Id != 0){
+    return c.JSON(http.StatusOK, beerItem)
+  }else{
+    return c.JSON(http.StatusNotFound, beerItem)
+  }
 
 }
-
 
 /* Agregar cerveza */
 func AddBeers(c echo.Context) error {
