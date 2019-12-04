@@ -9,7 +9,6 @@ import (
   "FallTestMSGo/fallfin/dblite"
 )
 
-
 func SearchBeerByIdGET(c echo.Context) error {
 
   id,_ := strconv.Atoi(c.Param("id"))
@@ -35,20 +34,6 @@ func AddBeers(c echo.Context) error {
   if err := c.Bind(exampleRequest); err != nil {
     return err
   }
-
-  // Manipulate the input data
-  greeting := exampleRequest.FirstName + " " + exampleRequest.LastName
-
-  return c.JSONBlob(
-    http.StatusOK,
-    []byte(
-      fmt.Sprintf(`{
-        "first_name": %q,
-        "last_name": %q,
-        "msg": "Hello %s"
-      }`, exampleRequest.FirstName, exampleRequest.LastName, greeting),
-    ),
-  )
   */
 
   beerIten := new(models.BeerItem)

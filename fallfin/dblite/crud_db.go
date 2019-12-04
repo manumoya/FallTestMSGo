@@ -12,7 +12,6 @@ import (
 func OpenBD() *sql.DB{
   //var db *sql.DB
 	//var err error
-  //os.Remove("./foo.db")
 	db, err := sql.Open("sqlite3", "./foo.db")
   if err != nil {
 		//log.Fatal(err)

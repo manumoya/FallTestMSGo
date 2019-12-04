@@ -5,19 +5,14 @@ import (
   "github.com/labstack/echo/middleware"
   "github.com/labstack/echo/engine/standard"
   "net/http"
-
   "database/sql"
   _ "github.com/mattn/go-sqlite3"
-
   "log"
 	"os"
-
-  // fallfin/dblite
-  "FallTestMSGo/fallfin/dblite"
-  "FallTestMSGo/fallfin/api"
-
   "fmt"
 
+  "FallTestMSGo/fallfin/dblite"
+  "FallTestMSGo/fallfin/api"
 )
 
 // Iniciar Log
@@ -40,7 +35,6 @@ func main(){
   e := echo.New()
   e.Use(middleware.CORS())
 
-  /* Persistencia  */
   /* crear BD */
   var db *sql.DB
   db = dblite.CreateBD()
@@ -52,15 +46,12 @@ func main(){
   //dblite.AddBeerItem(db, "Pilsen",  "Cristal") // added data to database
   //var beerItem = dblite.GetBeerItem(db, 1) // printing the user
 
-  /* Fin Persistencia */
-
   /* home */
   e.GET("/", func(c echo.Context) error {
     return c.String(http.StatusOK, "Hello , World!\n")
   })
 
   /* Route => api*/
-
   e.POST("/beers", api.AddBeers)
   e.GET("/beers", api.SearchBeerByIdGET)
 
