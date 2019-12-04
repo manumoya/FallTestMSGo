@@ -8,6 +8,18 @@ import (
   //"log"
 )
 
+/* Open BD */
+func OpenBD() *sql.DB{
+  //var db *sql.DB
+	//var err error
+  //os.Remove("./foo.db")
+	db, err := sql.Open("sqlite3", "./foo.db")
+  if err != nil {
+		//log.Fatal(err)
+	}
+  return db
+}
+
 /* Crear BD */
 func CreateBD() *sql.DB{
   //var db *sql.DB
@@ -22,14 +34,16 @@ func CreateBD() *sql.DB{
 
 /* Crear Table */
 func CreateTable(db *sql.DB){
-  db.Exec("create table if not exists BeerItemTable (id integer not null primary key,name text, brewery text)")
+  //db.Exec("create table if not exists BeerItemTable (id integer not null primary key,name text, brewery text)")
+  db.Exec("create table if not exists BeerItemTable (id integer ,name text, brewery text,country text, price real, currency text)")
+
 }
 
 /* Agregar BeerItem*/
-func AddBeerItem(db *sql.DB, name string, brewery string) {
+func AddBeerItem(db *sql.DB, id int, name string, brewery string, country string, price float32, currency string) {
   tx, _ := db.Begin()
-  stmt, _ := tx.Prepare("insert into BeerItemTable (name,brewery) values (?,?)")
-  _, err := stmt.Exec(name, brewery)
+  stmt, _ := tx.Prepare("insert into BeerItemTable (id,name,brewery,country,price,currency) values (?,?,?,?,?,?)")
+  _, err := stmt.Exec(id, name, brewery, country, price, currency)
   if err != nil {
 		//log.Fatal(err)
 	}

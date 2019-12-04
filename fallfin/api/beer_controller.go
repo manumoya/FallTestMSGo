@@ -1,19 +1,14 @@
 package api
 
 import (
-
   "FallTestMSGo/fallfin/models"
-
-  "fmt"
   "net/http"
-
   "github.com/labstack/echo"
-
   "strconv"
-
-  //"gitlab.com/ykyuen/golang-echo-template-example/model"
-
+  "database/sql"
+  "FallTestMSGo/fallfin/dblite"
 )
+
 
 func SearchBeerByIdGET(c echo.Context) error {
 
@@ -32,7 +27,7 @@ func SearchBeerByIdGET(c echo.Context) error {
 
 
 
-func SearchBeerById(c echo.Context) error {
+func AddBeers(c echo.Context) error {
 
   // Bind the input data to ExampleRequest
   /*
@@ -56,33 +51,15 @@ func SearchBeerById(c echo.Context) error {
   )
   */
 
-  fmt.Printf("Buscar ini \n")
-
   beerIten := new(models.BeerItem)
   if err := c.Bind(beerIten); err != nil {
     return err
   }
 
-  fmt.Printf("Beer Name" + beerIten.Name +" \n")
-
-  fmt.Printf("Buscar fin \n")
-
-
-  /*
-  return c.JSONBlob(
-    http.StatusOK,
-    []byte(
-      fmt.Sprintf(`{
-        "id": %q,
-        "name": %q,
-        "brewery": %q
-      }`, beerIten.Id, beerIten.Name, beerIten.Brewery ),
-    ),
-  )
-  */
+  var db *sql.DB
+  db = dblite.OpenBD()
+  dblite.AddBeerItem(db, beerIten.Id, beerIten.Name, beerIten.Brewery,
+                     beerIten.Country, beerIten.Price, beerIten.Currency)
 
   return c.JSON(http.StatusOK, beerIten)
-
-
-
 }

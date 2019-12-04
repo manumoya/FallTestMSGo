@@ -20,18 +20,21 @@ import (
 
 )
 
-
-
-func main(){
-
+// Iniciar Log
+func iniLog() *os.File{
   f, err := os.OpenFile("log.txt", os.O_RDWR | os.O_CREATE | os.O_APPEND, 0666)
   if err != nil {
-    log.Fatalf("error opening file: %v", err)
+    //log.Fatalf("error opening file: %v", err)
   }
   defer f.Close()
+  return f
+}
 
-  log.SetOutput(f)
-  log.Println("This is a test log entry")
+func main(){
+  var fLog *os.File
+  fLog = iniLog()
+  log.SetOutput(fLog)
+  log.Println("Prueba LOG")
 
   /* SETUP */
   e := echo.New()
@@ -46,29 +49,23 @@ func main(){
   dblite.CreateTable(db)
 
   /* Grabar una cervza*/
-  dblite.AddBeerItem(db, "Pilsen",  "Cristal") // added data to database
-  var beerItem = dblite.GetBeerItem(db, 1) // printing the user
+  //dblite.AddBeerItem(db, "Pilsen",  "Cristal") // added data to database
+  //var beerItem = dblite.GetBeerItem(db, 1) // printing the user
 
   /* Fin Persistencia */
 
   /* home */
   e.GET("/", func(c echo.Context) error {
-    return c.String(http.StatusOK, "Hello  " + beerItem.Name+ " , World!\n")
+    return c.String(http.StatusOK, "Hello , World!\n")
   })
 
-  // Route => api
-  //e.GET("/beers:beerID", api.SearchBeerById)
-  fmt.Printf("hello /beers \n")
-  e.POST("/beers", api.SearchBeerById)
+  /* Route => api*/
+
+  e.POST("/beers", api.AddBeers)
   e.GET("/beers", api.SearchBeerByIdGET)
 
-
-  /*e.GET("/beers", func(c echo.Context) error {
-    return c.String(http.StatusOK, "Por aca")
-  })
-  */
-
   // Server
+  fmt.Printf("Running... 8080")
   e.Run(standard.New(":8080"))
 
 }
