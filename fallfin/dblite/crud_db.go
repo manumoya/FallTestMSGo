@@ -77,16 +77,23 @@ if err != nil {
   log.Fatal(err)
 }
 
-for rows.Next() {
-  var tempBeerItem models.BeerItem
-  err = rows.Scan(&tempBeerItem.Id, &tempBeerItem.Name,  &tempBeerItem.Brewery)
-  if err != nil {
-    log.Fatal(err)
-  }
-  if tempBeerItem.Id== id2 {
-    return tempBeerItem
-  }
-}
-
-return models.BeerItem{}
 */
+
+func SearchAllBeer(db *sql.DB) models.BeerItemList {
+  var beers models.BeerItemList
+
+  rows, err := db.Query("select * from BeerItemTable")
+	if err != nil {
+		//log.Fatal(err)
+	}
+	defer rows.Close()
+  for rows.Next() {
+    var tempBeerItem models.BeerItem
+    err = rows.Scan(&tempBeerItem.Id, &tempBeerItem.Name,  &tempBeerItem.Brewery,
+                    &tempBeerItem.Country, &tempBeerItem.Price, &tempBeerItem.Currency)
+
+    beers.Beers = append(beers.Beers, tempBeerItem)
+  }
+
+  return beers
+}

@@ -8,3 +8,7 @@ type BeerItem struct {
   Price     float32 `json:"price"`
   Currency  string `json:"currency"`
 }
+
+type BeerItemList struct {
+  Beers  []BeerItem   `json:"beers"`
+}

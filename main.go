@@ -54,6 +54,7 @@ func main(){
   /* Route => api*/
   e.POST("/beers", api.AddBeers)
   e.GET("/beers/:beerID", api.SearchBeerByIdGET)
+  e.GET("/beers", api.SearchBeers)
 
   // Server
   fmt.Printf("Running... 8080")

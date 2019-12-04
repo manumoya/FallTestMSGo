@@ -52,3 +52,15 @@ func AddBeers(c echo.Context) error {
 
   return c.JSON(http.StatusOK, beerIten)
 }
+
+/* Buscar todas las cerezas */
+func SearchBeers(c echo.Context) error {
+  //var beer models.BeerItem
+	var beers models.BeerItemList
+  var db *sql.DB
+
+  db = dblite.OpenBD()
+  beers = dblite.SearchAllBeer(db)
+
+  return c.JSON(http.StatusOK, beers)
+}
