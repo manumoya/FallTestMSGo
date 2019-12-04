@@ -14,6 +14,9 @@ import (
 
   // fallfin/dblite
   "FallTestMSGo/fallfin/dblite"
+  "FallTestMSGo/fallfin/api"
+
+  "fmt"
 
 )
 
@@ -34,48 +37,36 @@ func main(){
   e := echo.New()
   e.Use(middleware.CORS())
 
-  /* ROUTES */
-  /*
-  e.POST("/api/articles", postArticle)
-  e.POST("/api/comments", postComment)
-
-  e.PUT("/api/comments/:comment_id", updateComment)
-
-  e.GET("/api/articles", getArticles)
-  e.GET("/api/articles/:article_id/comments", getCommentsByArticle)
-  e.GET("/api/comments/:comment_id", getCommentById)
-
-  e.DELETE("/api/comments/:comment_id", deleteComment)
-  e.DELETE("/api/articles/:article_id", deleteArticle)
-  */
-
-
   /* Persistencia  */
-
-  // crear BD
-
+  /* crear BD */
   var db *sql.DB
   db = dblite.CreateBD()
 
-  /*
-  os.Remove("./foo.db")
-	db, err := sql.Open("sqlite3", "./foo.db")
-  if err != nil {
-		log.Fatal(err)
-	}
-  */
-	//defer db.Close()
-  //db.Exec("create table if not exists testTable (id integer,username text, surname text,age Integer,university text)")
+  /* Crear tabla*/
   dblite.CreateTable(db)
 
+  /* Grabar una cervza*/
   dblite.AddBeerItem(db, "Pilsen",  "Cristal") // added data to database
   var beerItem = dblite.GetBeerItem(db, 1) // printing the user
 
- /* Fin Persistencia */
+  /* Fin Persistencia */
 
+  /* home */
   e.GET("/", func(c echo.Context) error {
     return c.String(http.StatusOK, "Hello  " + beerItem.Name+ " , World!\n")
   })
+
+  // Route => api
+  //e.GET("/beers:beerID", api.SearchBeerById)
+  fmt.Printf("hello /beers \n")
+  e.POST("/beers", api.SearchBeerById)
+  e.GET("/beers", api.SearchBeerByIdGET)
+
+
+  /*e.GET("/beers", func(c echo.Context) error {
+    return c.String(http.StatusOK, "Por aca")
+  })
+  */
 
   // Server
   e.Run(standard.New(":8080"))
