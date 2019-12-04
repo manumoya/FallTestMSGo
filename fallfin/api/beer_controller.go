@@ -36,7 +36,7 @@ func AddBeers(c echo.Context) error {
   // Bind the input data to ExampleRequest
   beerIten := new(models.BeerItem)
   if err := c.Bind(beerIten); err != nil {
-    //return err
+    return c.String(http.StatusBadRequest, "Request invalida")
   }
 
   var db *sql.DB
@@ -52,7 +52,7 @@ func AddBeers(c echo.Context) error {
     return c.String(http.StatusConflict, "El ID de la cerveza ya existe")
   }
 
-  return c.String(http.StatusBadRequest, "Request invalida")
+
 
 }
 
