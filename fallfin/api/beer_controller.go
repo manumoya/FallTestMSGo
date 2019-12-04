@@ -10,7 +10,7 @@ import (
   "FallTestMSGo/fallfin/store"
 )
 
-/**/
+/* Home */
 func Home(c echo.Context) error {
   return c.String(http.StatusOK, "Bienvenido a la api de Manuel Moya M.\n")
 }
@@ -24,38 +24,36 @@ func SearchBeerByIdGET(c echo.Context) error {
 
   var beerItem = store.GetBeerItem(db, id) // printing the user
 
-  // beerIten := new(models.BeerItem)
-  //beerIten.Id =id
   if (beerItem.Id != 0){
     return c.JSON(http.StatusOK, beerItem)
   }else{
     return c.String(http.StatusNotFound, "El Id {"+ strconv.Itoa(id) +"} de la cerveza no existe")
   }
-
 }
 
 /* Agregar cerveza */
 func AddBeers(c echo.Context) error {
-
   // Bind the input data to ExampleRequest
-  /*
-  exampleRequest := new(model.ExampleRequest)
-  if err := c.Bind(exampleRequest); err != nil {
-    return err
-  }
-  */
-
   beerIten := new(models.BeerItem)
   if err := c.Bind(beerIten); err != nil {
-    return err
+    //return err
   }
 
   var db *sql.DB
   db = store.OpenBD()
-  store.AddBeerItem(db, beerIten.Id, beerIten.Name, beerIten.Brewery,
-                     beerIten.Country, beerIten.Price, beerIten.Currency)
 
-  return c.JSON(http.StatusOK, beerIten)
+  var beerItem = store.GetBeerItem(db, beerIten.Id) // printing the user
+  if (beerItem.Id == 0){
+    store.AddBeerItem(db, beerIten.Id, beerIten.Name, beerIten.Brewery,
+                       beerIten.Country, beerIten.Price, beerIten.Currency)
+
+    return c.JSON(http.StatusOK, beerIten)
+  }else{
+    return c.String(http.StatusConflict, "El ID de la cerveza ya existe")
+  }
+
+  return c.String(http.StatusBadRequest, "Request invalida")
+
 }
 
 /* Buscar todas las cerezas */

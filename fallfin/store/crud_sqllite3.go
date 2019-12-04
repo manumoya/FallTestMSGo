@@ -35,7 +35,6 @@ func CreateBD() *sql.DB{
 func CreateTable(db *sql.DB){
   //db.Exec("create table if not exists BeerItemTable (id integer not null primary key,name text, brewery text)")
   db.Exec("create table if not exists BeerItemTable (id integer ,name text, brewery text,country text, price real, currency text)")
-
 }
 
 /* Agregar BeerItem*/
@@ -69,15 +68,6 @@ func GetBeerItem(db *sql.DB, id2 int) models.BeerItem{
 	}
 	return tempBeerItem
 }
-
-/*
-rows, err := db.Query("select * from BeerItemTable")
-//checkError(err)
-if err != nil {
-  log.Fatal(err)
-}
-
-*/
 
 func SearchAllBeer(db *sql.DB) models.BeerItemList {
   var beers models.BeerItemList

@@ -50,5 +50,4 @@ func main(){
   // Server
   fmt.Printf("Running... 8080")
   e.Run(standard.New(":8080"))
-
 }
