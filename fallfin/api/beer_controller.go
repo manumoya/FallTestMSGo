@@ -10,6 +10,11 @@ import (
   "FallTestMSGo/fallfin/dblite"
 )
 
+/**/
+func Home(c echo.Context) error {
+  return c.String(http.StatusOK, "Bienvenido a la api de Manuel Moya M.\n")
+}
+
 /* Buscar Cerveza por ID  */
 func SearchBeerByIdGET(c echo.Context) error {
   id,_ := strconv.Atoi(c.Param("beerID"))

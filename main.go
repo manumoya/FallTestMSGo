@@ -4,7 +4,6 @@ import (
   "github.com/labstack/echo"
   "github.com/labstack/echo/middleware"
   "github.com/labstack/echo/engine/standard"
-  "net/http"
   "database/sql"
   _ "github.com/mattn/go-sqlite3"
   "log"
@@ -42,12 +41,8 @@ func main(){
   /* Crear tabla*/
   dblite.CreateTable(db)
 
-  /* home */
-  e.GET("/", func(c echo.Context) error {
-    return c.String(http.StatusOK, "Hello , World!\n")
-  })
-
   /* Route => api*/
+  e.GET("/", api.Home)
   e.POST("/beers", api.AddBeers)
   e.GET("/beers/:beerID", api.SearchBeerByIdGET)
   e.GET("/beers", api.SearchBeers)
