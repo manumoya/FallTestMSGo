@@ -26,7 +26,7 @@ func SearchBeerByIdGET(c echo.Context) error {
 }
 
 
-
+/* Agregar cerveza */
 func AddBeers(c echo.Context) error {
 
   // Bind the input data to ExampleRequest
