@@ -29,7 +29,7 @@ func SearchBeerByIdGET(c echo.Context) error {
   if (beerItem.Id != 0){
     return c.JSON(http.StatusOK, beerItem)
   }else{
-    return c.JSON(http.StatusNotFound, beerItem)
+    return c.String(http.StatusNotFound, "El Id {"+ strconv.Itoa(id) +"} de la cerveza no existe")
   }
 
 }
