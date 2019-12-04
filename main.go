@@ -10,7 +10,7 @@ import (
 	"os"
   "fmt"
 
-  "FallTestMSGo/fallfin/dblite"
+  "FallTestMSGo/fallfin/store"
   "FallTestMSGo/fallfin/api"
 )
 
@@ -36,10 +36,10 @@ func main(){
 
   /* crear BD */
   var db *sql.DB
-  db = dblite.CreateBD()
+  db = store.CreateBD()
 
   /* Crear tabla*/
-  dblite.CreateTable(db)
+  store.CreateTable(db)
 
   /* Route => api*/
   e.GET("/", api.Home)

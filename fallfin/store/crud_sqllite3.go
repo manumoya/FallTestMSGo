@@ -1,4 +1,4 @@
-package dblite
+package store
 
 import (
   "database/sql"

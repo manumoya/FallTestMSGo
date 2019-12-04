@@ -7,7 +7,7 @@ import (
   "database/sql"
 
   "FallTestMSGo/fallfin/models"
-  "FallTestMSGo/fallfin/dblite"
+  "FallTestMSGo/fallfin/store"
 )
 
 /**/
@@ -20,9 +20,9 @@ func SearchBeerByIdGET(c echo.Context) error {
   id,_ := strconv.Atoi(c.Param("beerID"))
 
   var db *sql.DB
-  db = dblite.OpenBD()
+  db = store.OpenBD()
 
-  var beerItem = dblite.GetBeerItem(db, id) // printing the user
+  var beerItem = store.GetBeerItem(db, id) // printing the user
 
   // beerIten := new(models.BeerItem)
   //beerIten.Id =id
@@ -51,8 +51,8 @@ func AddBeers(c echo.Context) error {
   }
 
   var db *sql.DB
-  db = dblite.OpenBD()
-  dblite.AddBeerItem(db, beerIten.Id, beerIten.Name, beerIten.Brewery,
+  db = store.OpenBD()
+  store.AddBeerItem(db, beerIten.Id, beerIten.Name, beerIten.Brewery,
                      beerIten.Country, beerIten.Price, beerIten.Currency)
 
   return c.JSON(http.StatusOK, beerIten)
@@ -64,8 +64,8 @@ func SearchBeers(c echo.Context) error {
 	var beers models.BeerItemList
   var db *sql.DB
 
-  db = dblite.OpenBD()
-  beers = dblite.SearchAllBeer(db)
+  db = store.OpenBD()
+  beers = store.SearchAllBeer(db)
 
   return c.JSON(http.StatusOK, beers)
 }
