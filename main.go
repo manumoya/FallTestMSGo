@@ -42,10 +42,6 @@ func main(){
   /* Crear tabla*/
   dblite.CreateTable(db)
 
-  /* Grabar una cervza*/
-  //dblite.AddBeerItem(db, "Pilsen",  "Cristal") // added data to database
-  //var beerItem = dblite.GetBeerItem(db, 1) // printing the user
-
   /* home */
   e.GET("/", func(c echo.Context) error {
     return c.String(http.StatusOK, "Hello , World!\n")
