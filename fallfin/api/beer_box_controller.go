@@ -19,29 +19,14 @@ import (
 func BoxBeerPriceByID(c echo.Context) error {
 
 	var id int
-	//var currency string
-	//var quantity int
 
 	// obtiene info de parameters
 	id, _ = strconv.Atoi(c.Param("beerID"))
-
-	//fmt.Print("q onda:  " + strconv.Itoa(id))
 
 	// obtiene info de
 	raw, _ := ioutil.ReadAll(c.Request().Body())
 	c.Request().SetBody(ioutil.NopCloser(bytes.NewReader(raw)))
 
-	/*
-		jsonMap := make(map[string]interface{})
-		err := json.NewDecoder(bytes.NewReader(raw)).Decode(&jsonMap)
-		if err != nil {
-			return c.String(http.StatusBadRequest, "Request Inválido")
-		}
-
-		//json_map has the JSON Payload decoded into a map
-		//currency, _ := json.Marshal(jsonMap["currency"])
-		//quantity, _ := json.Marshal(jsonMap["quantity"])
-	*/
 	// OJO
 	var beerBoxInput models.BeerBoxInput
 
@@ -67,13 +52,10 @@ func BoxBeerPriceByID(c echo.Context) error {
 	s := strconv.FormatFloat(float64(montoConvertCurrency), 'f', -1, 32)
 	fmt.Print("monto cnvertido: " + s + "\n")
 
-	//intQuantity, _ := strconv.Atoi(string(beerBoxInput.Quantity))
 	quantityFixBox := service.GetQuantityBeerOK(beerBoxInput.Quantity)
 	beerBox.PriceTotal = montoConvertCurrency * float32(quantityFixBox)
 	beerBox.QuantityFinal = quantityFixBox
 	beerBox.BeerBox = quantityFixBox / 6
 
-	//fmt.Println(string(currency) + " " + string(quantity))
 	return c.JSON(http.StatusOK, beerBox)
-
 }
