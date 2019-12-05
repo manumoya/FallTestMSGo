@@ -47,7 +47,9 @@ func main(){
   e.GET("/beers/:beerID", api.SearchBeerByIdGET)
   e.GET("/beers", api.SearchBeers)
 
+  e.GET("/beers/:beerID/boxprice", api.BoxBeerPriceById)
+
   // Server
-  fmt.Printf("Running... 8080")
+  fmt.Printf("Running... 8080 \n")
   e.Run(standard.New(":8080"))
 }
