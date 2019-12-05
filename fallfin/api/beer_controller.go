@@ -10,12 +10,12 @@ import (
 	"github.com/labstack/echo"
 )
 
-/* Home */
+/*Home => Va al Home*/
 func Home(c echo.Context) error {
 	return c.String(http.StatusOK, "Bienvenido a la api de Manuel Moya M.\n")
 }
 
-/* Buscar Cerveza por ID  */
+/*SearchBeerByID => Buscar Cerveza por ID*/
 func SearchBeerByID(c echo.Context) error {
 	id, _ := strconv.Atoi(c.Param("beerID"))
 
@@ -30,7 +30,7 @@ func SearchBeerByID(c echo.Context) error {
 	return c.String(http.StatusNotFound, "El Id {"+strconv.Itoa(id)+"} de la cerveza no existe")
 }
 
-/* Agregar cerveza */
+/*AddBeers => Agregar cerveza*/
 func AddBeers(c echo.Context) error {
 	// Bind the input data to ExampleRequest
 	beerIten := new(models.BeerItem)
@@ -52,7 +52,7 @@ func AddBeers(c echo.Context) error {
 
 }
 
-/* Buscar todas las cerezas */
+/*SearchBeers => Buscar todas las cerezas*/
 func SearchBeers(c echo.Context) error {
 	//var beer models.BeerItem
 	var beers models.BeerItemList
