@@ -51,7 +51,12 @@ func BoxBeerPriceByID(c echo.Context) error {
 	}
 
 	var beerBox models.BeerBox
-	beerBox.PriceTotal = service.ConvertCurrency(beerItem.Currency, string(currency), beerItem.Price)
+	montoConvertCurrency := service.ConvertCurrency(beerItem.Currency, string(currency), beerItem.Price)
+	intQuantity, _ := strconv.Atoi(string(quantity))
+	quantityFixBox := service.GetQuantityBeerOK(intQuantity)
+	beerBox.PriceTotal = montoConvertCurrency * float32(quantityFixBox)
+	beerBox.QuantityFinal = quantityFixBox
+	beerBox.BeerBox = quantityFixBox / 6
 
 	fmt.Println(string(currency) + " " + string(quantity))
 	return c.JSON(http.StatusOK, beerBox)

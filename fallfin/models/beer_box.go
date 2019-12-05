@@ -1,7 +1,9 @@
 package models
 
 type BeerBox struct {
-	PriceTotal float32 `json:"priceTotal"`
+	PriceTotal    float32 `json:"priceTotal"`
+	QuantityFinal int     `json:"quantityFinal"`
+	BeerBox       int     `json:"beerBox"`
 }
 
 /*
