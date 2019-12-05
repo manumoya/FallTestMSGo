@@ -10,6 +10,7 @@ import (
 	"github.com/labstack/echo"
 )
 
+/* Lista el precio de una caja de cervezas de una marca */
 func BoxBeerPriceByID(c echo.Context) error {
 
 	var id int
