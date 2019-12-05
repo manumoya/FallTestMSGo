@@ -1,21 +1,40 @@
 package api
 
 import (
-  "strconv"
-  "github.com/labstack/echo"
-  "net/http"
-  "fmt"
+	"bytes"
+	"encoding/json"
+	"io/ioutil"
+	"net/http"
+	"strconv"
+
+	"github.com/labstack/echo"
 )
 
-func BoxBeerPriceById(c echo.Context) error {
+func BoxBeerPriceByID(c echo.Context) error {
 
-  id,_ := strconv.Atoi(c.Param("beerID"))
-  currency_buy := c.Param("currency")
-  quantity_buy,_ := strconv.Atoi(c.Param("quantity"))
+	var id int
+	//var currency string
+	//var quantity int
 
-  fmt.Println("currency_buy: " + currency_buy)
+	// obtiene info de parameters
+	id, _ = strconv.Atoi(c.Param("beerID"))
 
-  var msg= "Id {"+ strconv.Itoa(id) +"} / currency_buy" + currency_buy + " / quantity_buy "+ strconv.Itoa(quantity_buy)
+	//fmt.Print("q onda:  " + strconv.Itoa(id))
 
-  return c.String(http.StatusOK, msg)
+	// obtiene info de
+	raw, _ := ioutil.ReadAll(c.Request().Body())
+	c.Request().SetBody(ioutil.NopCloser(bytes.NewReader(raw)))
+
+	jsonMap := make(map[string]interface{})
+	err := json.NewDecoder(bytes.NewReader(raw)).Decode(&jsonMap)
+	if err != nil {
+		return c.String(http.StatusBadRequest, "malo malo ")
+	}
+
+	//json_map has the JSON Payload decoded into a map
+	currency, _ := json.Marshal(jsonMap["currency"])
+	quantity, _ := json.Marshal(jsonMap["quantity"])
+
+	return c.String(http.StatusOK, "r: "+strconv.Itoa(id)+" "+string(currency)+" "+string(quantity))
+
 }

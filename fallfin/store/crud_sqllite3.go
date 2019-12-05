@@ -1,89 +1,87 @@
 package store
 
 import (
-  "database/sql"
-  "os"
-  //"fallfin/models"
-  "FallTestMSGo/fallfin/models"
-  //"log"
+	"FallTestMSGo/fallfin/models"
+	"database/sql"
+	"os"
 )
 
 /* Open BD */
-func OpenBD() *sql.DB{
-  //var db *sql.DB
+func OpenBD() *sql.DB {
+	//var db *sql.DB
 	//var err error
 	db, err := sql.Open("sqlite3", "./foo.db")
-  if err != nil {
+	if err != nil {
 		//log.Fatal(err)
 	}
-  return db
+	return db
 }
 
 /* Crear BD */
-func CreateBD() *sql.DB{
-  //var db *sql.DB
+func CreateBD() *sql.DB {
+	//var db *sql.DB
 	//var err error
-  os.Remove("./foo.db")
+	os.Remove("./foo.db")
 	db, err := sql.Open("sqlite3", "./foo.db")
-  if err != nil {
+	if err != nil {
 		//log.Fatal(err)
 	}
-  return db
+	return db
 }
 
 /* Crear Table */
-func CreateTable(db *sql.DB){
-  //db.Exec("create table if not exists BeerItemTable (id integer not null primary key,name text, brewery text)")
-  db.Exec("create table if not exists BeerItemTable (id integer ,name text, brewery text,country text, price real, currency text)")
+func CreateTable(db *sql.DB) {
+	//db.Exec("create table if not exists BeerItemTable (id integer not null primary key,name text, brewery text)")
+	db.Exec("create table if not exists BeerItemTable (id integer ,name text, brewery text,country text, price real, currency text)")
 }
 
 /* Agregar BeerItem*/
 func AddBeerItem(db *sql.DB, id int, name string, brewery string, country string, price float32, currency string) {
-  tx, _ := db.Begin()
-  stmt, _ := tx.Prepare("insert into BeerItemTable (id,name,brewery,country,price,currency) values (?,?,?,?,?,?)")
-  _, err := stmt.Exec(id, name, brewery, country, price, currency)
-  if err != nil {
+	tx, _ := db.Begin()
+	stmt, _ := tx.Prepare("insert into BeerItemTable (id,name,brewery,country,price,currency) values (?,?,?,?,?,?)")
+	_, err := stmt.Exec(id, name, brewery, country, price, currency)
+	if err != nil {
 		//log.Fatal(err)
 	}
-  tx.Commit()
+	tx.Commit()
 }
 
 /* obtener una cerveza  por ID */
-func GetBeerItem(db *sql.DB, id2 int) models.BeerItem{
-  var stmt *sql.Stmt
+func GetBeerItem(db *sql.DB, id2 int) models.BeerItem {
+	var stmt *sql.Stmt
 	var err error
 
-  stmt, err = db.Prepare("select * from BeerItemTable where id = ?")
+	stmt, err = db.Prepare("select * from BeerItemTable where id = ?")
 	if err != nil {
 		//log.Fatal(err)
 	}
 	defer stmt.Close()
 
-  var tempBeerItem models.BeerItem
-  err = stmt.QueryRow(id2).Scan(&tempBeerItem.Id, &tempBeerItem.Name,  &tempBeerItem.Brewery,
-                                &tempBeerItem.Country, &tempBeerItem.Price, &tempBeerItem.Country)
+	var tempBeerItem models.BeerItem
+	err = stmt.QueryRow(id2).Scan(&tempBeerItem.Id, &tempBeerItem.Name, &tempBeerItem.Brewery,
+		&tempBeerItem.Country, &tempBeerItem.Price, &tempBeerItem.Country)
 
-  if err != nil {
+	if err != nil {
 		//log.Fatal(err)
 	}
 	return tempBeerItem
 }
 
 func SearchAllBeer(db *sql.DB) models.BeerItemList {
-  var beers models.BeerItemList
+	var beers models.BeerItemList
 
-  rows, err := db.Query("select * from BeerItemTable")
+	rows, err := db.Query("select * from BeerItemTable")
 	if err != nil {
 		//log.Fatal(err)
 	}
 	defer rows.Close()
-  for rows.Next() {
-    var tempBeerItem models.BeerItem
-    err = rows.Scan(&tempBeerItem.Id, &tempBeerItem.Name,  &tempBeerItem.Brewery,
-                    &tempBeerItem.Country, &tempBeerItem.Price, &tempBeerItem.Currency)
+	for rows.Next() {
+		var tempBeerItem models.BeerItem
+		err = rows.Scan(&tempBeerItem.Id, &tempBeerItem.Name, &tempBeerItem.Brewery,
+			&tempBeerItem.Country, &tempBeerItem.Price, &tempBeerItem.Currency)
 
-    beers.Beers = append(beers.Beers, tempBeerItem)
-  }
+		beers.Beers = append(beers.Beers, tempBeerItem)
+	}
 
-  return beers
+	return beers
 }
