@@ -1,5 +1,6 @@
 package service
 
+/*GetQuantityBeerOK => Obtiene cantidad necesaria por caja*/
 func GetQuantityBeerOK(quantity int) int {
 	mod6 := quantity % 6
 	if mod6 > 0 {

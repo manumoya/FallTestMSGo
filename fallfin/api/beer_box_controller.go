@@ -31,15 +31,24 @@ func BoxBeerPriceByID(c echo.Context) error {
 	raw, _ := ioutil.ReadAll(c.Request().Body())
 	c.Request().SetBody(ioutil.NopCloser(bytes.NewReader(raw)))
 
-	jsonMap := make(map[string]interface{})
-	err := json.NewDecoder(bytes.NewReader(raw)).Decode(&jsonMap)
-	if err != nil {
-		return c.String(http.StatusBadRequest, "Request Inválido")
-	}
+	/*
+		jsonMap := make(map[string]interface{})
+		err := json.NewDecoder(bytes.NewReader(raw)).Decode(&jsonMap)
+		if err != nil {
+			return c.String(http.StatusBadRequest, "Request Inválido")
+		}
 
-	//json_map has the JSON Payload decoded into a map
-	currency, _ := json.Marshal(jsonMap["currency"])
-	quantity, _ := json.Marshal(jsonMap["quantity"])
+		//json_map has the JSON Payload decoded into a map
+		//currency, _ := json.Marshal(jsonMap["currency"])
+		//quantity, _ := json.Marshal(jsonMap["quantity"])
+	*/
+	// OJO
+	var beerBoxInput models.BeerBoxInput
+
+	err := json.Unmarshal(raw, &beerBoxInput)
+	if err != nil {
+		//panic(err)
+	}
 
 	// busca cerveza por ID
 	var db *sql.DB
@@ -51,14 +60,20 @@ func BoxBeerPriceByID(c echo.Context) error {
 	}
 
 	var beerBox models.BeerBox
-	montoConvertCurrency := service.ConvertCurrency(beerItem.Currency, string(currency), beerItem.Price)
-	intQuantity, _ := strconv.Atoi(string(quantity))
-	quantityFixBox := service.GetQuantityBeerOK(intQuantity)
+
+	fmt.Print("conv: " + beerItem.Currency + "  " + beerBoxInput.Currency)
+	montoConvertCurrency := service.ConvertCurrency(string(beerItem.Currency), beerBoxInput.Currency, beerItem.Price)
+
+	s := strconv.FormatFloat(float64(montoConvertCurrency), 'f', -1, 32)
+	fmt.Print("monto cnvertido: " + s + "\n")
+
+	//intQuantity, _ := strconv.Atoi(string(beerBoxInput.Quantity))
+	quantityFixBox := service.GetQuantityBeerOK(beerBoxInput.Quantity)
 	beerBox.PriceTotal = montoConvertCurrency * float32(quantityFixBox)
 	beerBox.QuantityFinal = quantityFixBox
 	beerBox.BeerBox = quantityFixBox / 6
 
-	fmt.Println(string(currency) + " " + string(quantity))
+	//fmt.Println(string(currency) + " " + string(quantity))
 	return c.JSON(http.StatusOK, beerBox)
 
 }

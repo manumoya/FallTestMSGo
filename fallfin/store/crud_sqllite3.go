@@ -59,7 +59,7 @@ func GetBeerItem(db *sql.DB, id2 int) models.BeerItem {
 
 	var tempBeerItem models.BeerItem
 	err = stmt.QueryRow(id2).Scan(&tempBeerItem.Id, &tempBeerItem.Name, &tempBeerItem.Brewery,
-		&tempBeerItem.Country, &tempBeerItem.Price, &tempBeerItem.Country)
+		&tempBeerItem.Country, &tempBeerItem.Price, &tempBeerItem.Currency)
 
 	if err != nil {
 		//log.Fatal(err)

@@ -6,9 +6,7 @@ type BeerBox struct {
 	BeerBox       int     `json:"beerBox"`
 }
 
-/*
 type BeerBoxInput struct {
-  Currency  int `json:"currency"`
-  Quantity  int `json:"quantity"`
+	Currency string `json:"currency"`
+	Quantity int    `json:"quantity"`
 }
-*/
