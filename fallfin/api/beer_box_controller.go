@@ -1,8 +1,13 @@
 package api
 
 import (
+	"FallTestMSGo/fallfin/models"
+	"FallTestMSGo/fallfin/service"
+	"FallTestMSGo/fallfin/store"
 	"bytes"
+	"database/sql"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"strconv"
@@ -29,13 +34,26 @@ func BoxBeerPriceByID(c echo.Context) error {
 	jsonMap := make(map[string]interface{})
 	err := json.NewDecoder(bytes.NewReader(raw)).Decode(&jsonMap)
 	if err != nil {
-		return c.String(http.StatusBadRequest, "malo malo ")
+		return c.String(http.StatusBadRequest, "Request Inválido")
 	}
 
 	//json_map has the JSON Payload decoded into a map
 	currency, _ := json.Marshal(jsonMap["currency"])
 	quantity, _ := json.Marshal(jsonMap["quantity"])
 
-	return c.String(http.StatusOK, "r: "+strconv.Itoa(id)+" "+string(currency)+" "+string(quantity))
+	// busca cerveza por ID
+	var db *sql.DB
+	db = store.OpenBD()
+
+	var beerItem = store.GetBeerItem(db, id) // printing the user
+	if beerItem.Id == 0 {
+		return c.String(http.StatusNotFound, "El Id {"+strconv.Itoa(id)+"} de la cerveza no existe")
+	}
+
+	var beerBox models.BeerBox
+	beerBox.PriceTotal = service.ConvertCurrency(beerItem.Currency, string(currency), beerItem.Price)
+
+	fmt.Println(string(currency) + " " + string(quantity))
+	return c.JSON(http.StatusOK, beerBox)
 
 }

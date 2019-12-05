@@ -1,10 +1,12 @@
 package models
 
 type BeerBox struct {
-  Price_total   float32 `json:"price_total"`
+	PriceTotal float32 `json:"priceTotal"`
 }
 
+/*
 type BeerBoxInput struct {
   Currency  int `json:"currency"`
   Quantity  int `json:"quantity"`
 }
+*/
