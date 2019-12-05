@@ -1,10 +1,5 @@
 package service
 
-import (
-	"fmt"
-	"reflect"
-)
-
 /*ConvertCurrency => Convierte moneda*/
 func ConvertCurrency(currBeerCode string, currBuyCode string, monto float32) float32 {
 	var usd float32
@@ -12,18 +7,20 @@ func ConvertCurrency(currBeerCode string, currBuyCode string, monto float32) flo
 	usd = 819.0
 	//clp = 1.0
 
-	fmt.Println("com  " + currBeerCode + " / " + currBuyCode)
-	fmt.Println(reflect.TypeOf(currBeerCode))
-	fmt.Println(reflect.TypeOf(currBuyCode))
+	/*
+		fmt.Println("com  " + currBeerCode + " / " + currBuyCode)
+		fmt.Println(reflect.TypeOf(currBeerCode))
+		fmt.Println(reflect.TypeOf(currBuyCode))
+	*/
 
 	if currBeerCode == "USD" && currBuyCode == "CLP" {
-		fmt.Println("conv1")
+		//fmt.Println("conv1")
 		return monto * usd
 	} else if currBeerCode == "CLP" && currBuyCode == "USD" {
-		fmt.Println("conv2")
+		//fmt.Println("conv2")
 		return monto / usd
 	} else {
-		fmt.Println("conv3")
+		//fmt.Println("conv3")
 		return monto
 	}
 }

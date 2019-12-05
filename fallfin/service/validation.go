@@ -7,5 +7,4 @@ func GetQuantityBeerOK(quantity int) int {
 		return (quantity + (6 - mod6))
 	}
 	return quantity
-
 }

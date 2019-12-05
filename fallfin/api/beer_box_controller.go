@@ -7,7 +7,6 @@ import (
 	"bytes"
 	"database/sql"
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 	"strconv"
@@ -44,14 +43,10 @@ func BoxBeerPriceByID(c echo.Context) error {
 		return c.String(http.StatusNotFound, "El Id {"+strconv.Itoa(id)+"} de la cerveza no existe")
 	}
 
+	// Calculo de precio
 	var beerBox models.BeerBox
 
-	fmt.Print("conv: " + beerItem.Currency + "  " + beerBoxInput.Currency)
 	montoConvertCurrency := service.ConvertCurrency(string(beerItem.Currency), beerBoxInput.Currency, beerItem.Price)
-
-	s := strconv.FormatFloat(float64(montoConvertCurrency), 'f', -1, 32)
-	fmt.Print("monto cnvertido: " + s + "\n")
-
 	quantityFixBox := service.GetQuantityBeerOK(beerBoxInput.Quantity)
 	beerBox.PriceTotal = montoConvertCurrency * float32(quantityFixBox)
 	beerBox.QuantityFinal = quantityFixBox
